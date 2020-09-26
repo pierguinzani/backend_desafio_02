@@ -10,7 +10,8 @@ describe("Repositories", () => {
   });
 
   afterEach(async () => {
-    await RepositoryModel.collection.drop();
+    jest.clearAllMocks(); 
+    jest.resetAllMocks();
     await disconnectDatabase();
   });
 

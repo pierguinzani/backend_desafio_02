@@ -10,7 +10,8 @@ describe("Repositories", () => {
   });
 
   afterEach(async () => {
-    await RepositoryModel.collection.drop();
+    jest.clearAllMocks(); 
+    jest.resetAllMocks();
     await disconnectDatabase();
   });
 
@@ -20,7 +21,7 @@ describe("Repositories", () => {
       .send({
         url: "https://github.com/Rocketseat/umbriel",
         title: "Umbriel",
-        techs: ["Node", "Express", "TypeScript"]  
+        techs: ["Node", "Express", "TypeScript"]
       });
 
     const response = await request(app).get("/repositories");
@@ -38,3 +39,5 @@ describe("Repositories", () => {
     );
   });
 });
+
+//afterEach(() => { jest.clearAllMocks(); jest.resetAllMocks(); });
