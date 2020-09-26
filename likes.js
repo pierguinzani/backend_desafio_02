@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../app");
+const app = require("../../../src");
 
 describe("Likes", () => {
   it("should be able to give a like to the repository", async () => {
