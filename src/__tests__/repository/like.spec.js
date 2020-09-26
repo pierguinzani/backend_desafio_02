@@ -1,7 +1,24 @@
 const request = require("supertest");
 const app = require("../../../src");
+const { useDatabase, disconnectDatabase } = require("../../database");
+const { CONNECTION_STRING } = require("../../../config");
 
-describe("Likes", () => {
+// const repo = {
+//   url: "https://github.com/Rocketseat/umbriel",
+//   title: "Umbriel",
+//   techs: ["Node", "Express", "TypeScript"]
+// };
+describe("Repositories", () => {
+  beforeEach(async () => {
+    await useDatabase(CONNECTION_STRING);
+  });
+
+  afterEach(async () => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
+    await disconnectDatabase();
+  });
+
   it("should be able to give a like to the repository", async () => {
     const repository = await request(app)
       .post("/repositories")
@@ -12,7 +29,7 @@ describe("Likes", () => {
       });
 
     let response = await request(app).post(
-      `/repositories/${repository.body.id}/like`
+      `/repositories/${repository.body._id}/like`
     );
 
     expect(response.body).toMatchObject({
@@ -20,7 +37,7 @@ describe("Likes", () => {
     });
 
     response = await request(app).post(
-      `/repositories/${repository.body.id}/like`
+      `/repositories/${repository.body._id}/like`
     );
 
     expect(response.body).toMatchObject({

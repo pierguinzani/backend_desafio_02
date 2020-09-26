@@ -1,7 +1,6 @@
 const request = require("supertest");
 const app = require("../../../src");
 const { useDatabase, disconnectDatabase } = require("../../database");
-const { RepositoryModel } = require("../../model");
 const { CONNECTION_STRING } = require("../../../config");
 
 describe("Repositories", () => {

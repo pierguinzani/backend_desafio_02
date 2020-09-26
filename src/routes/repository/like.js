@@ -16,7 +16,7 @@ const list = async (request, response) => {
          $inc: { likes: 1 } 
       }, {new: true });
 
-    return response.json({ result });
+    return response.json( {likes: result.likes} );
   } catch (err) {
     //console.log(err);
     response

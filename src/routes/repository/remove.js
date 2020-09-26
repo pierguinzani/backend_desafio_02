@@ -14,15 +14,13 @@ const remove = async (request, response) => {
     const result = await RepositoryModel.findOneAndRemove(
       { _id: id },
     );
-    return response.json(result);
+    return response.status(204).send()
   } catch (err) {
     //console.log(err);
     response
       .status(400)
       .json({ message: "Error when trying to delete a repository" });
   }
-
-  return response.status(204).send()
 };
 
 
