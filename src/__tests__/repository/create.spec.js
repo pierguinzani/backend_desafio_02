@@ -1,11 +1,11 @@
 const request = require("supertest");
 const app = require("../../../src");
 const { useDatabase, disconnectDatabase } = require("../../database");
-const { CONNECTION_STRING } = require("../../../config");
+const { HOSTMONGO, MONGOBD } = require("../../../config");
 
 describe("Repositories", () => {
   beforeEach(async () => {
-    await useDatabase(CONNECTION_STRING);
+    await useDatabase(HOSTMONGO, MONGOBD);
   });
 
   afterEach(async () => {

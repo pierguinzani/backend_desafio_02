@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+    api: 
+        command: yarn start
+        # env_file:
+        #     - ./.env.dev
+        # environment:
+        #     - NODE_ENV=dev 
+        # env_file:
+        #     - .env
+        #     - .env.dev  
+        build: .
+        container_name: api_${NODE_ENV}
+        restart: always        
+        ports: 
+            - ${NODE_INTERNAL_PORT}:${NODE_EXTERNAL_PORT}
+        links: 
+            - mongo 
+        networks: 
+            - mdb-network
+            
+    mongo: 
+        container_name: mongo_${NODE_ENV}
+        restart: always
+        image: mongo
+        volumes: 
+            - ./data:/data/db 
+        ports: 
+            - ${MONGO_INTERNAL_PORT}:${MONGO_EXTERNAL_PORT}
+        networks: 
+            - mdb-network
+        
+networks:
+    mdb-network:
+        driver: bridge
