@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+    api: 
+        command: yarn test  
+        build: .
+        container_name: api_${NODE_ENV}   
+        ports: 
+            - ${NODE_INTERNAL_PORT}:${NODE_EXTERNAL_PORT}
+        links: 
+            - mongo 
+        networks: 
+            - mdb-network
+            
+    mongo: 
+        container_name: mongo_${NODE_ENV}
+        restart: always
+        image: mongo
+        volumes: 
+            - ./data:/data/db 
+        ports: 
+            - ${MONGO_INTERNAL_PORT}:${MONGO_EXTERNAL_PORT}
+        networks: 
+            - mdb-network
+        
+networks:
+    mdb-network:
+        driver: bridge
