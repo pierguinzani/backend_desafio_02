@@ -1,3 +1,5 @@
 node_modules
-#.env
 data
+# .env
+# .env.dev
+# .env.stagings

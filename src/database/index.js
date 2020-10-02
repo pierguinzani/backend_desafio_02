@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const useDatabase = async (HOSTMONGO, MONGOBD) => {
   try {
-    const connection = await mongoose.connect('mongodb://' + HOSTMONGO + MONGOBD, {
+    const connection = await mongoose.connect(`mongodb://${HOSTMONGO}${MONGOBD}`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

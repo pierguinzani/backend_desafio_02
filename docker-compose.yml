@@ -2,14 +2,7 @@ version: "3"
 
 services:
     api: 
-        command: yarn start
-        # env_file:
-        #     - ./.env.dev
-        # environment:
-        #     - NODE_ENV=dev 
-        # env_file:
-        #     - .env
-        #     - .env.dev  
+        command: yarn start  
         build: .
         container_name: api_${NODE_ENV}
         restart: always        

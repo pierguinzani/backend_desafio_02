@@ -30,4 +30,16 @@ describe("Repositories", () => {
       likes: 0
     });
   });
+  it("should be not able to create a new repository", async () => {
+    const response = await request(app)
+      .post("/repositories")
+      .send({
+        //url: "https://github.com/Rocketseat/umbriel",
+        title: "Umbriel",
+        techs: ["Node", "Express", "TypeScript"]
+      });
+
+      expect(response.body.message).toBe('Error when trying to create a repository');
+  });
 });
+
