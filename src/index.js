@@ -1,5 +1,7 @@
-const express = require("express");
-const cors = require("cors");
+const express = require("express"),
+cors = require("cors"),
+swaggerUi = require('swagger-ui-express'),
+swaggerDocument = require('./utils/swagger.json');
 // const { v4: uuid } = require('uuid');
 // const { RepositoryModel } = require("../src/model/index");
 
@@ -17,7 +19,20 @@ app.get("/", (req, res) => {
   return res.send("Welcome to my api!");
 });
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/repositories", repository);
+
+module.exports = app;
+
+
+
+
+
+
+
+
+
+
 
 // app.get("/repositories", async(request, response) => {
 //   try {
@@ -125,4 +140,3 @@ app.use("/repositories", repository);
   
 // });
 
-module.exports = app;
