@@ -1,5 +1,5 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "version": "1.0.0",
     "title": "Repository API",
@@ -7,10 +7,23 @@
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
+    },
+    "contact": {
+      "name": "Pier Guinzani",
+      "email": "pierguinzani@gmail.com",
+      "url": "http://linkedin.com/in/pierguinzani"
     }
   },
-  "host": "localhost:3333",
-  "basePath": "/",
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Local server"
+    },
+    {
+      "url": "http://myapp.heroku.com/",
+      "description": "Production Server"
+    }
+  ],
   "tags": [
     {
       "name": "Repositories",
@@ -21,37 +34,61 @@
     "http"
   ],
   "consumes": [
-    "application/json"
+    "application/json",
+    "application/x-www-form-urlencoded"
   ],
   "produces": [
-    "application/json"
+    "application/json",
+    "application/x-www-form-urlencoded"
   ],
   "paths": {
     "/repositories": {
+      "get": {
+        "summary": "Get all repositories",
+        "operationId": "listRepositories",
+        "tags": [
+          "Repositories"
+        ],
+        "description": "Get a list of all repositories",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Repositories"
+            }
+          }
+        }
+      },
       "post": {
+        "summary": "Creates a new repository",
+        "operationId": "createRepository",
         "tags": [
           "Repositories"
         ],
         "description": "Creates a new repository with given input array",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Repository that we want to create",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Repository"
+        "parameters": [],
+        "requestBody": {
+          "name": "body",
+          "in": "body",
+          "description": "Repository that we want to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/Repository"
+              }
             }
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "The repository has been created",
-            "schema": {
-              "$ref": "#/definitions/RepositorySucess"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/RepositorySucess"
+                }
+              }
             }
           },
           "400": {
@@ -62,76 +99,187 @@
                   "$ref": "#/components/schemas/Error"
                 },
                 "example": {
-                  "message": "Invalid parameters",
-                  "code": "400",
-                  "error": "Bad Request"
+                  "message": "string"
                 }
               }
             }
           }
         }
-      },
-      "/users": {
-        "get": {
-          "tags": [
-            "Users"
-          ],
-          "summary": "Get all users in system",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/definitions/Users"
-              }
-            }
-          }
-        }
-      },
-      "/user/{id}": {
+      }
+    },
+    "/repositories/{_id}": {
+      "put": {
+        "tags": [
+          "Repositories"
+        ],
+        "summary": "Updates a repository in the store with form data",
+        "operationId": "updateRepository",
         "parameters": [
           {
-            "name": "id",
+            "name": "_id",
             "in": "path",
+            "description": "ID of repository that needs to be updated",
             "required": true,
-            "description": "ID of user that we want to find",
-            "type": "integer"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
-        "delete": {
-          "summary": "Delete user with given ID",
-          "tags": [
-            "Users"
-          ],
-          "responses": {
-            "200": {
-              "description": "User is deleted",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
               "schema": {
-                "$ref": "#/definitions/User"
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "description": "Updated title of the repository",
+                    "type": "string"
+                  },
+                  "url": {
+                    "description": "Updated url of the repository",
+                    "type": "string"
+                  },
+                  "techs": {
+                    "description": "Updated techs of the repository",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "title"
+                ]
               }
             }
           }
         },
-        "put": {
-          "summary": "Update user with give ID",
-          "tags": [
-            "Users"
-          ],
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "User with new values of properties",
-              "schema": {
-                "$ref": "#/definitions/updateUser"
+        "responses": {
+          "200": {
+            "description": "Repository updated.",
+            "content": {
+              "application/json": {},
+              "application/xml": {}
+            }
+          },
+          "405": {
+            "description": "Method Not Allowed",
+            "content": {
+              "application/json": {},
+              "application/xml": {}
+            }
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a repository",
+        "tags": [
+          "Repositories"
+        ],
+        "description": "Delete a repository with given ID",
+        "operationId": "removeRepository",
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "description": "ID of repository that needs to be deleted",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Repository is deleted",
+            "schema": {
+              "$ref": "#/definitions/Repository"
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "string"
+                }
               }
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "User is updated",
-              "schema": {
-                "$ref": "#/definitions/User"
-              }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all users in system",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of user that we want to update",
+          "type": "integer"
+        }
+      ],
+      "delete": {
+        "summary": "Delete user with given ID",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "User is deleted",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user with give ID",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User with new values of properties",
+            "schema": {
+              "$ref": "#/definitions/updateUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is updated",
+            "schema": {
+              "$ref": "#/definitions/User"
             }
           }
         }
@@ -237,6 +385,22 @@
           }
         },
         "companies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "updateRepository": {
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "techs": {
           "type": "array",
           "items": {
             "type": "string"

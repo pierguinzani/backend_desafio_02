@@ -2,18 +2,13 @@ const express = require("express"),
 cors = require("cors"),
 swaggerUi = require('swagger-ui-express'),
 swaggerDocument = require('./utils/swagger.json');
-// const { v4: uuid } = require('uuid');
-// const { RepositoryModel } = require("../src/model/index");
+const errorHandling = require('./middlewares/error-handling');
 
 const { repository } = require("./routes");
-
-
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-
-// const repositories = [];
 
 app.get("/", (req, res) => {
   return res.send("Welcome to my api!");
@@ -21,6 +16,7 @@ app.get("/", (req, res) => {
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/repositories", repository);
+app.use(errorHandling);
 
 module.exports = app;
 
