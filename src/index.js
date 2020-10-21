@@ -10,8 +10,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  return res.send("Welcome to my api!");
+app.get("/", (request, response) => {
+  return response.send("Welcome to my api!");
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

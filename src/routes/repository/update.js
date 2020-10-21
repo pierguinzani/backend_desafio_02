@@ -5,6 +5,8 @@ const { RepositoryModel } = require("../../model/index");
 const update = async (request, response) => {
   
   const { id } = request.params;
+  console.log("aaaaaaaaaaaaaaaa")
+  console.log(request)
 
   if (request.body.likes != undefined) {
     return response.json({ error: "Error trying to update the amount of likes" });

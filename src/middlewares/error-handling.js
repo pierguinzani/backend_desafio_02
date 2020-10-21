@@ -1,8 +1,8 @@
-const errorHandling = async (err, req, res, next) => {
+const errorHandling = async (err, request, response, next) => {
   
     // format error
     if (!err.status && !err.errors) {
-      res.status(500).json({
+      response.status(500).json({
         errors: [
           {
             message: err.message,
@@ -10,7 +10,7 @@ const errorHandling = async (err, req, res, next) => {
         ],
       });
     } else {
-      res.status(err.status).json({
+      response.status(err.status).json({
         message: err.message,
         errors: err.errors,
       });
